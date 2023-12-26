@@ -1,0 +1,76 @@
+﻿@model dxxt.Models.ScoreStuSub
+
+@{
+    ViewData["Title"] = "Create Score";
+}
+
+<h1>Create Score / Enroll Subject</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StudentID" class="control-label">Student</label>
+                <select asp-for="StudentID" class="form-control" asp-items="ViewBag.Students"></select>
+                <span asp-validation-for="StudentID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectID" class="control-label">Subject</label>
+                <select asp-for="SubjectID" class="form-control" asp-items="ViewBag.Subjects"></select>
+                <span asp-validation-for="SubjectID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Marks" class="control-label">Marks</label>
+                <input asp-for="Marks" class="form-control" />
+                <span asp-validation-for="Marks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#StudentID').on('change', function () {
+                var studentId = $(this).val();
+
+                $.ajax({
+                    url: '/Scores/GetAvailableSubjects', // Replace with your server URL
+                    type: 'GET', 
+                    data: { StudentID: studentId },
+                    success: function (response) {
+                        console.log(response);
+                        var subjectsList = $('#SubjectID');
+
+                        subjectsList.empty();
+
+                        subjectsList.append($("<option></option>").attr("value", "").text("Select a Subject"));
+
+                        $.each(response, function (index, sub) {
+                            console.log(sub);
+                            subjectsList.append($('<option></option>')
+                                .attr('value', sub.subjectID)
+                                .text(sub.subjectName));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+
+}

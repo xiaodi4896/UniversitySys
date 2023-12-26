@@ -1,0 +1,61 @@
+﻿@model dxxt.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Lecturer Details";
+}
+
+<h1>Lecturer Details</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <dl class="row">
+            <dt class="col-sm-3">Lecturer Name</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.LecturerName)</dd>
+        </dl>
+        <div>
+            <h4>Subjects Assigned</h4>
+            @if (Model.Subjects != null && Model.Subjects.Any())
+            {
+                <table class="table table-striped scrollable-table">
+                    <thead>
+                        <tr>
+                            <th>Subject Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in Model.Subjects)
+                        {
+                            <tr>
+                                <td>@subject.SubjectName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No subjects assigned.</p>
+            }
+        </div>
+        <a asp-action="Edit" asp-route-id="@Model?.LecturerID" class="btn btn-info">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+<style>
+    .scrollable-table thead, .scrollable-table tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .scrollable-table tbody {
+        display: block;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .scrollable-table {
+        width: 100%;
+    }
+</style>

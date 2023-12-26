@@ -1,0 +1,71 @@
+﻿@model LecturerIndexViewModel
+
+@{
+    ViewData["Title"] = "Lecturer List";
+}
+
+<h1>Lecturer List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Lecturer</a>
+</p>
+
+<!-- Search Form -->
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <input type="text" name="searchQuery" id="searchQuery" class="form-control mr-2" placeholder="Search Lecturers" />
+    <button type="submit" class="btn btn-outline-secondary">Search</button>
+</form>
+
+
+<!-- Lecturer Table -->
+<table class="table table-hover table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Lecturer ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Lecturers)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.LecturerName)</td>
+                <td>@item.LecturerID</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LecturerID" class="btn btn-sm btn-info">Edit Name</a>
+                    <a asp-action="Details" asp-route-id="@item.LecturerID" class="btn btn-sm btn-primary">Subjects Assigned</a>
+                    <a asp-action="Delete" asp-route-id="@item.LecturerID" class="btn btn-sm btn-danger">Terminate</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+@section Scripts {
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var debounceTimeout;
+
+            $('#searchQuery').on('keyup', function () {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function () {
+                    $('form').submit();
+                }, 700);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,49 @@
+﻿@model dxxt.Models.Lecturer
+
+@{
+    ViewData["Title"] = "Delete Lecturer";
+}
+
+<h1>Delete Lecturer</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <h4>Are you sure you want to delete this?</h4>
+        <dl class="row">
+            <dt class="col-sm-4">Lecturer Name</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.LecturerName)</dd>
+        </dl>
+        <form asp-action="Delete" id="deleteForm">
+            <input type="hidden" asp-for="LecturerID" />
+            <input type="button" value="Delete" class="btn btn-danger" onclick="confirmDelete(@Model.LecturerID)" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(lecturerId) {
+            $.ajax({
+                url: '@Url.Action("IsTeachingSubjects", "Lecturers")',
+                type: 'GET',
+                data: { id: lecturerId },
+                success: function (isTeaching) {
+                    if (isTeaching) {
+                        alert('Cannot delete this lecturer unless they have been relieved of all their duties.');
+                    } else {
+                        if (confirm('Are you sure you want to delete this lecturer?')) {
+                            $('#deleteForm').submit();
+                        }
+                    }
+                },
+                error: function () {
+                    alert('Error in checking lecturer teaching status.');
+                }
+            });
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

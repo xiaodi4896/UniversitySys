@@ -1,0 +1,22 @@
+﻿@model dxxt.Models.ScoreStuSub
+
+@{
+    ViewData["Title"] = "Score Details";
+}
+
+<h1>Score Details</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">Student Name</dt>
+            <dd class="col-sm-8">@Model.StudentName</dd>
+            <dt class="col-sm-4">Subject Name</dt>
+            <dd class="col-sm-8">@Model.SubjectName</dd>
+            <dt class="col-sm-4">Marks</dt>
+            <dd class="col-sm-8">@Model.Marks</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.ScoreID" class="btn btn-info">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
